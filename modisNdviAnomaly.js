@@ -122,11 +122,11 @@ var setup = function setup(dss) {
 
 
 var filterScenes = function filterScenes(scenes, metadataInput, nbPastYears) {
-  var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
+  /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
   for(let i = 0 ; i < scenes.length ; i++) {
    tmpString = tmpString + " | " + scenes[i].date
   }	  
-  throw new Error(tmpString)
+  throw new Error(tmpString)*/
   return scenes.filter(function (scene) {
     return scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears;
   });
