@@ -91,9 +91,9 @@
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = ({
   "default": {
-    nbPastYears: 3,
+    nbPastYears: 4,
     defaultOutputValue: -2,
-    ndviMinValue: -1,
+    ndviMinValue: 0.1,
     currentIndexesMinValuesNumber: 1,
     pastIndexesMinValuesNumber: 3
   },
