@@ -93,7 +93,7 @@
   "default": {
     nbPastYears: 4,
     defaultOutputValue: -2,
-    ndviMinValue: 0.1,
+    ndviMinValue: 0.05,
     currentIndexesMinValuesNumber: 1,
     pastIndexesMinValuesNumber: 3
   },
