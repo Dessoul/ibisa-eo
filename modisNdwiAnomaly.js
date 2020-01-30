@@ -115,7 +115,8 @@
 "use strict";
 var setup = function setup(dss) {
   // get all bands for display and analysis
-  setInputComponents([dss.B02, dss.B01]); // return as RGB
+  //setInputComponents([dss.B02, dss.B01]); // return as RGB
+  setInputComponents([dss.B02, dss.B06]); // return as RGB
 
   setOutputComponentCount(3);
 }; // you should reduce number of scenes you are processing as much as possible here to speed up the processing
