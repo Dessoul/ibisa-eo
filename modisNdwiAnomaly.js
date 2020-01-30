@@ -93,12 +93,12 @@
   "default": {
     nbPastYears: 5,
     defaultOutputValue: -2,
-    ndviMinValue: 0.05,
+    ndviMinValue: -1,
     currentIndexesMinValuesNumber: 1,
     pastIndexesMinValuesNumber: 3
   },
   ndviAnomaly: {
-    pixelEvalMaxValue: 0.5
+    pixelEvalMaxValue: 1
   },
   loss: {
     lowerTriggerPremium: 0,
