@@ -7,6 +7,8 @@ var pixelEvalMaxValue = 0.5 ;
 
 
 var calculateNDVI = function (sample) {
+  throw new Error('calculateNDVI') ;
+  
   var denom = sample.B04 + sample.B08 ;
   if (denom === 0) return null ;
 
@@ -15,6 +17,8 @@ var calculateNDVI = function (sample) {
 } ;
 
 var isClouds = function (sample) {
+  throw new Error('isClouds') ;
+	
   //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
   var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
   var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
@@ -23,6 +27,8 @@ var isClouds = function (sample) {
 } ;
 
 var calculateIndexesForSamples = function (samples, scenes, processSampleMethod) {
+  throw new Error('calculateIndexesForSamples') ;
+	
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
 
   return samples.reduce(function(acc, sample, index) {
@@ -47,6 +53,8 @@ var calculateIndexesForSamples = function (samples, scenes, processSampleMethod)
 } ;
 
 var calculatePastIndexesAverage = function (indexes, currentYear) {
+  throw new Error('calculatePastIndexesAverage') ;
+	
   var pastIndexes = {
     count: 0,
     sum: 0,
@@ -64,6 +72,8 @@ var calculatePastIndexesAverage = function (indexes, currentYear) {
 } ;
 
 var calculateIndexAverages = function (samples, scenes, processSampleMethod) {
+  throw new Error('calculateIndexAverages') ;
+	
   if (!scenes.length) throw new Error('scenes array is empty') ;
 
   var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
@@ -92,6 +102,8 @@ var calculateIndexAverages = function (samples, scenes, processSampleMethod) {
 
 
 var setup = function (dss) {
+  throw new Error('setup') ;
+
   // get all bands for display and analysis
   setInputComponents([dss.B04, dss.B08]) ;
 
@@ -101,6 +113,7 @@ var setup = function (dss) {
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 var filterScenes = function (scenes, metadataInput) {
+  throw new Error('filterScenes') ;
 	
   /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
   for(let i = 0 ; i < scenes.length ; i++) {
@@ -112,6 +125,8 @@ var filterScenes = function (scenes, metadataInput) {
 } ;
 
 var calculateNdviAnomaly = function (indexesAverages, pixelEvalMaxValue, defaultValue) {
+  throw new Error('calculateNdviAnomaly') ;
+  
   if (indexesAverages.current === null || indexesAverages.past === null) return defaultValue ;
 
   return Math.max(
@@ -123,6 +138,8 @@ var calculateNdviAnomaly = function (indexesAverages, pixelEvalMaxValue, default
 
 // eslint-disable-next-line no-unused-vars
 evaluatePixel = function (samples, scenes) {
+  throw new Error('evaluatePixel') ;
+  
   var indexesAverages = calculateIndexAverages(
     samples,
     scenes,
