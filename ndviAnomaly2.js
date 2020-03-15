@@ -1,0 +1,142 @@
+var nbPastYears = 4 ;
+var defaultOutputValue = -2 ;
+var ndviMinValue = 0.05 ;
+var currentIndexesMinValuesNumber = 1 ;
+var pastIndexesMinValuesNumber = 3 ;
+var pixelEvalMaxValue = 0.5 ;
+
+
+var calculateNDVI = function (sample) {
+  var denom = sample.B04 + sample.B08 ;
+  if (denom === 0) return null ;
+
+  var result = (sample.B08 - sample.B04) / denom ;
+  return result > ndviMinValue ? result : null ;
+} ;
+
+var isClouds = function (sample) {
+  //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
+  var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
+  var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
+
+  return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
+} ;
+
+var calculateIndexesForSamples = function (samples, scenes, processSampleMethod) {
+  if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
+
+  return samples.reduce(function(acc, sample, index) {
+    if (isClouds(sample)) return acc ;
+
+    var indexValue = processSampleMethod(sample) ;
+    if (!indexValue) return acc ;
+
+    var sceneYear = scenes[index].date.getFullYear() ;
+    if (!acc[sceneYear]) {
+      acc[sceneYear] = {
+        count: 0,
+        sum: 0,
+      } ;
+    }
+
+    acc[sceneYear].count++ ;
+    acc[sceneYear].sum += indexValue ;
+
+    return acc ;
+  }, {}) ;
+} ;
+
+var calculatePastIndexesAverage = function (indexes, currentYear) {
+  var pastIndexes = {
+    count: 0,
+    sum: 0,
+  } ;
+
+  for (var i = 1; i <= nbPastYears; i++) {
+    var indexValue = indexes[currentYear - i] ;
+    if (indexValue && indexValue.count) {
+      pastIndexes.count++ ;
+      pastIndexes.sum += indexValue.sum / indexValue.count ;
+    }
+  }
+
+  return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
+} ;
+
+var calculateIndexAverages = function (samples, scenes, processSampleMethod) {
+  if (!scenes.length) throw new Error('scenes array is empty') ;
+
+  var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
+  var currentYear = scenes[0].date.getFullYear() ;
+    
+  /*var tmpString = "\n"
+  for(let i = currentYear - nbPastYears ; i <= currentYear ; i++) {
+	  tmpString = tmpString + 
+		"year " + i + " | "
+	if (indexes[i]) {
+      tmpString = tmpString + 
+		"count " + indexes[i].count + " | " +
+		"sum " + indexes[i].sum
+    }
+	tmpString = tmpString + "\n"
+  }	  
+  throw new Error(tmpString)*/
+  
+  var currentYearIndex = indexes[currentYear] ;
+
+  return {
+    current: currentYearIndex && currentYearIndex.count >= currentIndexesMinValuesNumber && currentYearIndex.sum / currentYearIndex.count || null,
+    past: calculatePastIndexesAverage(indexes, currentYear),
+  } ;
+} ;
+
+
+var setup = function (dss) {
+  // get all bands for display and analysis
+  setInputComponents([dss.B04, dss.B08]) ;
+
+  // return as RGB
+  setOutputComponentCount(3) ;
+} ;
+
+// you should reduce number of scenes you are processing as much as possible here to speed up the processing
+var filterScenes = function (scenes, metadataInput) {
+	
+  /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
+  for(let i = 0 ; i < scenes.length ; i++) {
+	  tmpString = tmpString + " | " + scenes[i].date
+  }	  
+  throw new Error(tmpString)*/
+	
+  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+} ;
+
+var calculateNdviAnomaly = function (indexesAverages, pixelEvalMaxValue, defaultValue) {
+  if (indexesAverages.current === null || indexesAverages.past === null) return defaultValue ;
+
+  return Math.max(
+    Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
+    0 - pixelEvalMaxValue
+  ) ;
+} ;
+
+
+// eslint-disable-next-line no-unused-vars
+evaluatePixel = function (samples, scenes) {
+  var indexesAverages = calculateIndexAverages(
+    samples,
+    scenes,
+    calculateNDVI
+  ) ;
+
+  return colorBlend(
+    calculateNdviAnomaly(indexesAverages, pixelEvalMaxValue, defaultOutputValue),
+    [defaultOutputValue, 0 - pixelEvalMaxValue, 0, pixelEvalMaxValue],
+    [
+      [0, 0, 0],
+      [1, 0, 0],
+      [1, 1, 1],
+      [0, 1, 0]
+    ]
+  ) ;
+} ;
