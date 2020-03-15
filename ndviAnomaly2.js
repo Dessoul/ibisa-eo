@@ -131,10 +131,10 @@ var filterScenes = function (scenes, metadataInput) {
 } ;
 
 
-var calculateNdviAnomaly = function (indexesAverages, pixelEvalMaxValue, defaultValue) {
-  throw new Error('calculateNdviAnomaly') ;
+var calculateIndexAnomaly = function (indexesAverages) {
+  throw new Error('calculateIndexAnomaly') ;
   
-  if (indexesAverages.current === null || indexesAverages.past === null) return defaultValue ;
+  if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
 
   return Math.max(
     Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
@@ -154,7 +154,7 @@ evaluatePixel = function (samples, scenes) {
   ) ;
 
   return colorBlend(
-    calculateNdviAnomaly(indexesAverages, pixelEvalMaxValue, defaultOutputValue),
+    calculateIndexAnomaly(indexesAverages),
     [defaultOutputValue, 0 - pixelEvalMaxValue, 0, pixelEvalMaxValue],
     [
       [0, 0, 0],
