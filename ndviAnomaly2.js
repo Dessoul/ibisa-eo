@@ -6,8 +6,8 @@ var pastIndexesMinValuesNumber = 3 ;
 var pixelEvalMaxValue = 0.5 ;
 
 
-var calculateNDVI = function (sample) {
-  throw new Error('calculateNDVI') ;
+var calculateIndex = function (sample) {
+  throw new Error('calculateIndex') ;
   
   var denom = sample.B04 + sample.B08 ;
   if (denom === 0) return null ;
@@ -15,6 +15,7 @@ var calculateNDVI = function (sample) {
   var result = (sample.B08 - sample.B04) / denom ;
   return result > ndviMinValue ? result : null ;
 } ;
+
 
 var isClouds = function (sample) {
   throw new Error('isClouds') ;
@@ -25,6 +26,7 @@ var isClouds = function (sample) {
 
   return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
 } ;
+
 
 var calculateIndexesForSamples = function (samples, scenes, processSampleMethod) {
   throw new Error('calculateIndexesForSamples') ;
@@ -52,6 +54,7 @@ var calculateIndexesForSamples = function (samples, scenes, processSampleMethod)
   }, {}) ;
 } ;
 
+
 var calculatePastIndexesAverage = function (indexes, currentYear) {
   throw new Error('calculatePastIndexesAverage') ;
 	
@@ -70,6 +73,7 @@ var calculatePastIndexesAverage = function (indexes, currentYear) {
 
   return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
 } ;
+
 
 var calculateIndexAverages = function (samples, scenes, processSampleMethod) {
   throw new Error('calculateIndexAverages') ;
@@ -105,11 +109,13 @@ var setup = function (dss) {
   throw new Error('setup') ;
 
   // get all bands for display and analysis
-  setInputComponents([dss.B04, dss.B08]) ;
+  //setInputComponents([dss.B04, dss.B08]);
+  setInputComponents([dss.B03, dss.B04, dss.B08, dss.B11]) ;
 
   // return as RGB
   setOutputComponentCount(3) ;
 } ;
+
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 var filterScenes = function (scenes, metadataInput) {
@@ -123,6 +129,7 @@ var filterScenes = function (scenes, metadataInput) {
 	
   return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 } ;
+
 
 var calculateNdviAnomaly = function (indexesAverages, pixelEvalMaxValue, defaultValue) {
   throw new Error('calculateNdviAnomaly') ;
@@ -143,7 +150,7 @@ evaluatePixel = function (samples, scenes) {
   var indexesAverages = calculateIndexAverages(
     samples,
     scenes,
-    calculateNDVI
+    calculateIndex
   ) ;
 
   return colorBlend(
