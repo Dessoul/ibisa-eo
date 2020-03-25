@@ -6,7 +6,7 @@ var pastIndexesMinValuesNumber = 3 ;
 var pixelEvalMaxValue = 0.5 ;
 
 
-var calculateIndex = function (sample) {
+calculateIndex = function (sample) {
   throw new Error('calculateIndex') ;
   
   var denom = sample.B04 + sample.B08 ;
@@ -17,7 +17,7 @@ var calculateIndex = function (sample) {
 } ;
 
 
-var isClouds = function (sample) {
+isClouds = function (sample) {
   throw new Error('isClouds') ;
 	
   //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
@@ -28,7 +28,7 @@ var isClouds = function (sample) {
 } ;
 
 
-var calculateIndexesForSamples = function (samples, scenes, processSampleMethod) {
+calculateIndexesForSamples = function (samples, scenes, processSampleMethod) {
   throw new Error('calculateIndexesForSamples') ;
 	
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
@@ -55,7 +55,7 @@ var calculateIndexesForSamples = function (samples, scenes, processSampleMethod)
 } ;
 
 
-var calculatePastIndexesAverage = function (indexes, currentYear) {
+calculatePastIndexesAverage = function (indexes, currentYear) {
   throw new Error('calculatePastIndexesAverage') ;
 	
   var pastIndexes = {
@@ -75,7 +75,7 @@ var calculatePastIndexesAverage = function (indexes, currentYear) {
 } ;
 
 
-var calculateIndexAverages = function (samples, scenes, processSampleMethod) {
+calculateIndexAverages = function (samples, scenes, processSampleMethod) {
   throw new Error('calculateIndexAverages') ;
 	
   if (!scenes.length) throw new Error('scenes array is empty') ;
@@ -105,7 +105,7 @@ var calculateIndexAverages = function (samples, scenes, processSampleMethod) {
 } ;
 
 
-var setup = function (dss) {
+setup = function (dss) {
   throw new Error('setup') ;
 
   // get all bands for display and analysis
@@ -118,7 +118,7 @@ var setup = function (dss) {
 
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
-var filterScenes = function (scenes, metadataInput) {
+filterScenes = function (scenes, metadataInput) {
   throw new Error('filterScenes') ;
 	
   /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
@@ -131,7 +131,7 @@ var filterScenes = function (scenes, metadataInput) {
 } ;
 
 
-var calculateIndexAnomaly = function (indexesAverages) {
+calculateIndexAnomaly = function (indexesAverages) {
   throw new Error('calculateIndexAnomaly') ;
   
   if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
