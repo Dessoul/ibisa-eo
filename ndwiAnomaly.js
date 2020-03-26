@@ -1,6 +1,6 @@
 var nbPastYears = 4 ;
 var defaultOutputValue = -2 ;
-var indexMinimumValue = 0.05 ;
+var indexMinimumValue = -1 ;
 var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
 var pixelEvalMaxValue = 0.5 ;
