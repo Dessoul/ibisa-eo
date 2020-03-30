@@ -136,10 +136,10 @@ function filterScenes(scenes, metadataInput) {
 function calculateIndexAnomaly(indexesAverages) {
   //throw new Error('calculateIndexAnomaly') ;
 
-  if (indexesAverages.current === null || indexesAverages.past === null || Math.abs(indexesAverages.past) < 0.01) return defaultOutputValue ;
+  if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
 
   return Math.max(
-    Math.min((indexesAverages.current - indexesAverages.past) / indexesAverages.past, pixelEvalMaxValue),
+    Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ;
 } ;
