@@ -139,7 +139,7 @@ function calculateIndexAnomaly(indexesAverages) {
   if (indexesAverages.current === null || indexesAverages.past === null || Math.abs(indexesAverages.past) < 0.01) return defaultOutputValue ;
 
   return Math.max(
-    Math.min(indexesAverages.current - indexesAverages.past) / indexesAverages.past, pixelEvalMaxValue),
+    Math.min((indexesAverages.current - indexesAverages.past) / indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ;
 } ;
