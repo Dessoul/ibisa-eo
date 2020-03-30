@@ -21,10 +21,16 @@ var pixelEvalMaxValue = 0.5 ;
 //  throw new Error('isClouds') ;
 
   //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
-  var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
-  var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
-
-  return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
+  //var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
+  //var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
+  //return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
+  var ndvi = (sample.B08 - sample.B03) / (sample.B03 + sample.B08)
+  var split = 0.05;
+  if(ndvi <= split) {
+    return true
+  }else{
+    return false
+  }
 } ;
 
 
