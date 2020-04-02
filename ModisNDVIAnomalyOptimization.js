@@ -86,7 +86,7 @@ var pixelEvalMaxValue = 0.5 ;
   }else{
     return null
   }
-} ;avav
+} ;
 
 
  function calculateIndexAverages(samples, scenes, processSampleMethod) {
