@@ -110,7 +110,7 @@ function setup(dss) {
 
   // get all bands for display and analysis
   //setInputComponents([dss.B04, dss.B08]);
-  setInputComponents([dss.B01, dss.B02,dss.B08]) ;
+  setInputComponents([dss.B01, dss.B02]) ;
 
   // return as RGB
   setOutputComponentCount(3) ;
