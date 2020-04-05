@@ -128,7 +128,8 @@ function filterScenes(scenes, metadataInput) {
   }
   throw new Error(tmpString)*/
 
-  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+  //return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+throw new Error(typeof(scenes)
 } ;
 
 
@@ -165,4 +166,3 @@ function calculateIndexAnomaly(indexesAverages) {
     ]
   ) ;
 } ;
-
