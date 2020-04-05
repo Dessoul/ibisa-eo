@@ -130,10 +130,10 @@ function filterScenes(scenes, metadataInput) {
 
 
 //return
-  // scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 
 
-  throw new Error('scenes')    
+  //throw new Error('scenes', typeof(scenes))    
 
 } ;
 
