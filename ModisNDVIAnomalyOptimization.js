@@ -1,7 +1,7 @@
 // Filter Reduce 
 
 
-var nbPastYears = 4 ;B08
+var nbPastYears = 4 ;
 var defaultOutputValue = -2 ;
 var ndviMinValue = 0.05 ;
 var currentIndexesMinValuesNumber = 1 ;
