@@ -1,6 +1,3 @@
-// Filter Reduce 
-
-
 var nbPastYears = 4 ;
 var defaultOutputValue = -2 ;
 var ndviMinValue = 0.05 ;
@@ -21,11 +18,15 @@ var pixelEvalMaxValue = 0.5 ;
 
 
  function isClouds(sample) {
-// NDVI detects clouds 
-  return False
+//  throw new Error('isClouds') ;
+
+  //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
+  var ngdr = (sample.B04 - sample.B01) / (sample.B04 + sample.B01) ;
+  var ratio = (sample.B04 - 0.175) / (0.39 - 0.175) ;
+
+  return sample.B06 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
+  //
 } ;
-
-
 
 
  function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
@@ -62,7 +63,7 @@ var pixelEvalMaxValue = 0.5 ;
     count: 0,
     sum: 0,
   } ;
-  
+  /*
   for (var i = 1; i <= nbPastYears; i++) {
     var indexValue = indexes[currentYear - i] ;
     if (indexValue && indexValue.count) {
@@ -71,8 +72,21 @@ var pixelEvalMaxValue = 0.5 ;
     }
   }
   return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
-
-} ;
+  Why? Avoid unneccessary calculations, in this case an unnecessary loop given a condition
+  */
+  if(pastIndexes.count >= pastIndexesMinValuesNumber){
+    for (var i = 1; i <= nbPastYears; i++) {
+      var indexValue = indexes[currentYear - i] ;
+      if (indexValue && indexValue.count) {
+        pastIndexes.count++ ;
+        pastIndexes.sum += indexValue.sum / indexValue.count ;
+      }
+    } 
+    return pastIndexes.sum / pastIndexes.count
+  }else{
+    return null
+  }
+} ;avav
 
 
  function calculateIndexAverages(samples, scenes, processSampleMethod) {
@@ -110,7 +124,7 @@ function setup(dss) {
 
   // get all bands for display and analysis
   //setInputComponents([dss.B04, dss.B08]);
-  setInputComponents([dss.B01, dss.B02]) ;
+  setInputComponents([dss.B01, dss.B02, dss.B04, dss.B06]) ;
 
   // return as RGB
   setOutputComponentCount(3) ;
@@ -126,15 +140,8 @@ function filterScenes(scenes, metadataInput) {
 	  tmpString = tmpString + " | " + scenes[i].date
   }
   throw new Error(tmpString)*/
-//Filters out the data
 
-
-//return
   return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
-
-
-  //throw new Error('scenes', typeof(scenes))    
-
 } ;
 
 
