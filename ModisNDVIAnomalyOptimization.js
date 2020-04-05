@@ -126,7 +126,7 @@ function filterScenes(scenes, metadataInput) {
 	  tmpString = tmpString + " | " + scenes[i].date
   }
   throw new Error(tmpString)*/
-  throw new Error(scene)
+  throw new Error(scenes)
 
   return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 } ;
