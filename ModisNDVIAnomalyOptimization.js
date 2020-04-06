@@ -127,8 +127,12 @@ function filterScenes(scenes, metadataInput) {
   }
   throw new Error(tmpString)*/
   //throw new Error(scenes)
-  console.log(scene)
-  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+//  console.log(scene)
+ // return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+for (var i = 0; i < scenes.length; i++) {
+  scenes[i] = (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears)
+}
+
 } ;
 
 
