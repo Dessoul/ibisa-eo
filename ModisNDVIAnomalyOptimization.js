@@ -122,16 +122,13 @@ function setup(dss) {
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 function filterScenes(scenes, metadataInput) {
-	
-	filteredScenes = [];
-	for (var i=0; i < scenes.length ; i++)
-	{
-		if (scenes[i].date.getMonth()===metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) 
-		{
-			filteredScenes.push(scenes[i]);
-		}
-	}  
-	return filteredScenes;
+  filteredScenes = [];
+    for (var i=0; i < scenes.length ; i++){
+      if (scenes[i].date.getMonth()===metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears){
+        filteredScenes.push(scenes[i]);
+      }
+    }  
+return filteredScenes;
 	
 } ;
 
