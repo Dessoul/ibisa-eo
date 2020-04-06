@@ -35,11 +35,13 @@ var pixelEvalMaxValue = 0.5 ;
 
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
 
-  return samples.reduce(function(acc, sample, index) {
+  /*
+  return samples.reduce(
+    
+    function(acc, sample, index) {
     if (isClouds(sample)) return acc ;
-
-    var indexValue = processSampleMethod(sample) ;
-    if (!indexValue) return acc ;
+     var indexValue = processSampleMethod(sample) ;
+     if (!indexValue) return acc ;
 
     var sceneYear = scenes[index].date.getFullYear() ;
     if (!acc[sceneYear]) {
@@ -54,6 +56,29 @@ var pixelEvalMaxValue = 0.5 ;
 
     return acc ;
   }, {}) ;
+  */
+
+  for (var i=0; i < samples.length ; i++){
+    if(isClouds(semples[i]) || !processSampleMethod(samples[i])) return acc
+
+    var sceneYear = scenes[i].date.getFullYear() ;
+
+    if (!acc[sceneYear]) {
+      acc[sceneYear] = {
+        count: 0,
+        sum: 0,
+      } ;
+    }else{
+      acc[sceneYear].count++ ;
+      acc[sceneYear].sum += indexValue ;
+    }
+	}  
+
+
+
+
+
+  
 } ;
 
 
