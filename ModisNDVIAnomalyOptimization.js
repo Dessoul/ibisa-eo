@@ -125,9 +125,9 @@ function filterScenes(scenes, metadataInput) {
 	filteredScenes = [];
 	for (var i=0; i < scenes.length ; i++)
 	{
-		if (scene[i].date.getMonth()===metadataInput.to.getMonth() && scene[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) 
+		if (scenes[i].date.getMonth()===metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) 
 		{
-			filteredScenes.push(scene[i]);
+			filteredScenes.push(scenes[i]);
 		}
 	}  
 	return filteredScenes;
