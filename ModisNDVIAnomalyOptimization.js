@@ -58,26 +58,25 @@ var pixelEvalMaxValue = 0.5 ;
   }, {}) ;
   */
 
-  for (var i=0; i < samples.length ; i++){
-    if(isClouds(samples[i]) || !processSampleMethod(samples[i])) return acc
+ var acc = {} ;
+ for (var i=0; i < samples.length ; i++){
+   if(!isClouds(samples[i])) {
+     var indexValue = processSampleMethod(sample) ;
+     if(indexValue) {
+       var sceneYear = scenes[i].date.getFullYear() ;
 
-    var sceneYear = scenes[i].date.getFullYear() ;
-
-    if (!acc[sceneYear]) {
-      acc[sceneYear] = {
-        count: 0,
-        sum: 0,
-      } ;
-    }else{
-      acc[sceneYear].count++ ;
-      acc[sceneYear].sum += indexValue ;
-    }
-	}  
-
-
-
-
-
+       if (!acc[sceneYear]) {
+         acc[sceneYear] = {
+         count: 1,
+         sum: indexValue,
+         }
+   } else {
+     acc[sceneYear].count++ ;
+     acc[sceneYear].sum += indexValue ;
+   }
+     }
+   }  
+ }
   
 } ;
 
