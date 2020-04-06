@@ -28,30 +28,31 @@ var pixelEvalMaxValue = 0.5 ;
 } ;
 
 
+
  function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
 //  throw new Error('calculateIndexesForSamples') ;
 
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
+  var acc = [] ;
+  for (var i=0; i < samples.length ; i++){
+    if(!isClouds(samples[i])) {
+      var indexValue = processSampleMethod(samples[i]) ;
+      if(indexValue) {
+        var sceneYear = scenes[i].date.getFullYear() ;
 
-  return samples.reduce(function(acc, sample, index) {
-    if (isClouds(sample)) return acc ;
-
-    var indexValue = processSampleMethod(sample) ;
-    if (!indexValue) return acc ;
-
-    var sceneYear = scenes[index].date.getFullYear() ;
-    if (!acc[sceneYear]) {
-      acc[sceneYear] = {
-        count: 0,
-        sum: 0,
-      } ;
-    }
-
-    acc[sceneYear].count++ ;
-    acc[sceneYear].sum += indexValue ;
-
-    return acc ;
-  }, {}) ;
+       if (!acc[sceneYear]) {
+         acc[sceneYear] = {
+           count: 1,
+           sum: indexValue,
+         }
+      }else{
+       acc[sceneYear].count++ ;
+       acc[sceneYear].sum += indexValue ;
+       }
+     }
+   }  
+ }
+return acc
 } ;
 
 
@@ -132,15 +133,14 @@ function setup(dss) {
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 function filterScenes(scenes, metadataInput) {
-  //throw new Error('filterScenes') ;
-
-  /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
-  for(let i = 0 ; i < scenes.length ; i++) {
-	  tmpString = tmpString + " | " + scenes[i].date
-  }
-  throw new Error(tmpString)*/
-
-  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
+  filteredScenes = [];
+    for (var i=0; i < scenes.length ; i++){
+      if (scenes[i].date.getMonth()===metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears){
+        filteredScenes.push(scenes[i]);
+      }
+    }  
+return filteredScenes;
+	
 } ;
 
 
