@@ -123,7 +123,7 @@ function setup(dss) {
 function filterScenes(scenes, metadataInput) {
 	
 	filteredScenes = [];
-	for (i=0;var i < scenes.length ; i++)
+	for (i=0; i < scenes.length ; i++)
 	{
 		if (scene[i].date.getMonth()===metadataInput.to.getMonth() && scene[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) 
 		{
