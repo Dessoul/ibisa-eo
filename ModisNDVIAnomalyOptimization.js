@@ -34,53 +34,26 @@ var pixelEvalMaxValue = 0.5 ;
 //  throw new Error('calculateIndexesForSamples') ;
 
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
-
-  /*
-  return samples.reduce(
-    
-    function(acc, sample, index) {
-    if (isClouds(sample)) return acc ;
-     var indexValue = processSampleMethod(sample) ;
-     if (!indexValue) return acc ;
-
-    var sceneYear = scenes[index].date.getFullYear() ;
-    if (!acc[sceneYear]) {
-      acc[sceneYear] = {
-        count: 0,
-        sum: 0,
-      } ;
-    }
-
-    acc[sceneYear].count++ ;
-    acc[sceneYear].sum += indexValue ;
-
-    return acc ;
-  }, {}) ;
-  */
- var acc = [] ;
- for (var i=0; i < samples.length ; i++){
-   if(!isClouds(samples[i])) {
-     var indexValue = processSampleMethod(samples[i]) ;
-     if(indexValue) {
-       var sceneYear = scenes[i].date.getFullYear() ;
+  var acc = [] ;
+  for (var i=0; i < samples.length ; i++){
+    if(!isClouds(samples[i])) {
+      var indexValue = processSampleMethod(samples[i]) ;
+      if(indexValue) {
+        var sceneYear = scenes[i].date.getFullYear() ;
 
        if (!acc[sceneYear]) {
-
          acc[sceneYear] = {
-         count: 1,
-         sum: indexValue,
+           count: 1,
+           sum: indexValue,
          }
-
-   } else {
-     acc[sceneYear].count++ ;
-     acc[sceneYear].sum += indexValue ;
-
-   }
+      }else{
+       acc[sceneYear].count++ ;
+       acc[sceneYear].sum += indexValue ;
+       }
      }
    }  
  }
-	 
-	return acc
+return acc
   
 } ;
 
