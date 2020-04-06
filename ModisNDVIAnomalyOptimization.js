@@ -65,6 +65,8 @@ var pixelEvalMaxValue = 0.5 ;
        var sceneYear = scenes[i].date.getFullYear() ;
 
        if (!acc[sceneYear]) {
+	 throw new Error('sceneyear') ;
+
          acc[sceneYear] = {
          count: 1,
          sum: indexValue,
