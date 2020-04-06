@@ -119,20 +119,18 @@ function setup(dss) {
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 function filterScenes(scenes, metadataInput) {
-  //throw new Error('filterScenes') ;
-
-  /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
-  for(let i = 0 ; i < scenes.length ; i++) {
-	  tmpString = tmpString + " | " + scenes[i].date
-  }
-  throw new Error(tmpString)*/
-  //throw new Error(scenes)
-//  console.log(scene)
- // return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
-for (var i = 0; i < scenes.length; i++) {
-  scenes[i] = (scenes[i].date.getMonth() === metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears)
-}
-
+	
+	var nbPastYears=5;
+	var filteredScenes = [];
+	for (i=0;var i < scenes.length ; i++)
+	{
+		if (scene[i].date.getMonth()===metadataInput.to.getMonth() && scene[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) 
+		{
+			filteredScenes.push(scene[i]);
+		}
+	}  
+	return filteredScenes;
+	
 } ;
 
 
