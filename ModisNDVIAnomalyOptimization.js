@@ -4,6 +4,8 @@ var ndviMinValue = 0.05 ;
 var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
 var pixelEvalMaxValue = 0.5 ;
+//var nbPastYears=5;
+
 
 
  function calculateIndex(sample) {
@@ -120,8 +122,7 @@ function setup(dss) {
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 function filterScenes(scenes, metadataInput) {
 	
-	var nbPastYears=5;
-	var filteredScenes = [];
+	filteredScenes = [];
 	for (i=0;var i < scenes.length ; i++)
 	{
 		if (scene[i].date.getMonth()===metadataInput.to.getMonth() && scene[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) 
