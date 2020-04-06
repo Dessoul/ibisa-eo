@@ -7,7 +7,7 @@ var pixelEvalMaxValue = 0.5 ;
 
 
  function calculateIndex(sample) {
-//  throw new Error('calculateIndex') ;
+// throw new Error('calculateIndex') ;
 
   var denom = sample.B02 + sample.B01 ;
   if (denom === 0) return null ;
@@ -126,7 +126,7 @@ function filterScenes(scenes, metadataInput) {
 	  tmpString = tmpString + " | " + scenes[i].date
   }
   throw new Error(tmpString)*/
-  throw new Error(scenes)
+  //throw new Error(scenes)
 
   return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 } ;
