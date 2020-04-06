@@ -60,7 +60,7 @@ var pixelEvalMaxValue = 0.5 ;
 
  var acc = {} ;
  for (var i=0; i < samples.length ; i++){
-   if(!isClouds(samples[i])) {
+   if(!isClouds(samples)) {
      var indexValue = processSampleMethod(samples) ;
      if(indexValue) {
        var sceneYear = scenes[i].date.getFullYear() ;
