@@ -130,7 +130,7 @@ function filterScenes(scenes, metadataInput) {
 //  console.log(scene)
  // return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 for (var i = 0; i < scenes.length; i++) {
-  scenes[i] = (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears)
+  scenes[i] = (scenes[i].date.getMonth() === metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears)
 }
 
 } ;
