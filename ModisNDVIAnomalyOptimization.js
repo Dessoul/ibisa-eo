@@ -70,11 +70,12 @@ var pixelEvalMaxValue = 0.5 ;
          count: 1,
          sum: indexValue,
          }
-	  throw new Error('sceneyear1') ;
 
    } else {
      acc[sceneYear].count++ ;
      acc[sceneYear].sum += indexValue ;
+	throw new Error('sceneyear2') ;
+
    }
      }
    }  
