@@ -197,7 +197,7 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     0 - pixelEvalMaxValue
   ) ; */
 
-  return ((indexesAverages.current-indexesAverages.past)/calculatePastIndexesStandardDeviation(indexesAverages.current, scenes[0].date.getFullYear(),indexesAverages.past))
+  return ((indexesAverages.current-indexesAverages.past)/calculatePastIndexesStandardDeviation(indexesAverages, scenes[0].date.getFullYear(),indexesAverages.past))
 } ;
 
 
