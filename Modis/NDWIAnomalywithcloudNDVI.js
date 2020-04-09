@@ -100,7 +100,7 @@ function calculatePastIndexesStandardDeviation (indexes, currentYear, pastAverag
       pastIndexes.sum += (averageIndexForMonth-pastAverage) * (averageIndexForMonth - pastAverage)
     }
   }
-  return sqrt(pastIndexes.sum/pastIndexes.count)
+  return Math.samplessqrt(pastIndexes.sum/pastIndexes.count)
 }
 
 
@@ -222,4 +222,3 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     ]
   ) ;
 } ;
-
