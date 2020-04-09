@@ -86,22 +86,6 @@ function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
 } ;
 
 
-function calculatePastIndexesStandardDeviation (indexes, currentYear, pastAverage) {
-  var pastIndexes = {
-    count: 0,
-    sumSquareDeviation: 0
-  }
-
-  for (var i= 1; i <=nbPastYears; i++ ){
-    var indexValue = indexes[currentYear -i];
-    if(indexValue && indexValue.count){
-      pastIndexes.count++;
-      var averageIndexForMonth = indexValue.sum /indexValue.count
-      pastIndexes.sum += (averageIndexForMonth-pastAverage) * (averageIndexForMonth - pastAverage)
-    }
-  }
-  return Math.sqrt(pastIndexes.sum/pastIndexes.count)
-}
 
 
 
@@ -184,21 +168,17 @@ function filterScenes(scenes, metadataInput) {
   return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 } ;
 
-//Added Scenes to get the current year
-function calculateIndexAnomaly(indexesAverages,scenes) {
+function calculateIndexAnomaly(indexesAverages) {
   //throw new Error('calculateIndexAnomaly') ;
-//throw indexesAverages
+
   if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
 
-  // has to receive indexes.Averages stdev so current-past/ stdev
-/*
   return Math.max(
     Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
-  ) ; */
-
-  return ((indexesAverages.current-indexesAverages.past)/calculatePastIndexesStandardDeviation(indexesAverages, scenes[0].date.getFullYear(),indexesAverages.past))
+  ) ;
 } ;
+
 
 
 // eslint-disable-next-line no-unused-vars
