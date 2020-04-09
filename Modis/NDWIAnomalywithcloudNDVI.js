@@ -100,7 +100,7 @@ function calculatePastIndexesStandardDeviation (indexes, currentYear, pastAverag
       pastIndexes.sum += (averageIndexForMonth-pastAverage) * (averageIndexForMonth - pastAverage)
     }
   }
-  return Math.samplessqrt(pastIndexes.sum/pastIndexes.count)
+  return Math.sqrt(pastIndexes.sum/pastIndexes.count)
 }
 
 
