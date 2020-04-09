@@ -63,7 +63,7 @@ return acc
     count: 0,
     sum: 0,
   } ;
-  /*
+
   for (var i = 1; i <= nbPastYears; i++) {
     var indexValue = indexes[currentYear - i] ;
     if (indexValue && indexValue.count) {
@@ -71,21 +71,8 @@ return acc
       pastIndexes.sum += indexValue.sum / indexValue.count ;
     }
   }
+
   return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
-  Why? Avoid unneccessary calculations, in this case an unnecessary loop given a condition
-  */
-  if(pastIndexes.count >= pastIndexesMinValuesNumber){
-    for (var i = 1; i <= nbPastYears; i++) {
-      var indexValue = indexes[currentYear - i] ;
-      if (indexValue && indexValue.count) {
-        pastIndexes.count++ ;
-        pastIndexes.sum += indexValue.sum / indexValue.count ;
-      }
-    } 
-    return pastIndexes.sum / pastIndexes.count
-  }else{
-    return null
-  }
 } ;
 
 
