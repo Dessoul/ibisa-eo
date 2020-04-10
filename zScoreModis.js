@@ -110,7 +110,7 @@ function calculatePastIndexesStandardDeviation (indexes, currentYear, pastAverag
 
   if (!scenes.length) throw new Error('scenes array is empty') ;
 
-  var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
+  var indexes = calculateIndexesForSamples(samples, scenes, calculateIndex) ;
   var currentYear = scenes[0].date.getFullYear() ;
 
   /*var tmpString = "\n"
