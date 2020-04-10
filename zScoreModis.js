@@ -227,8 +227,8 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     [
       [0, 0, 0],
       [x(237), x(125), x(49)],
-      [0, x(32), x(96)],
-      [0, 1, 0]
+      [1, 1, 1],
+      [0, x(32), x(96)]
     ]
   ) ;
 } ;
