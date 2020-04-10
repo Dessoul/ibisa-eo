@@ -38,25 +38,32 @@ var pixelEvalMaxValue = 0.5 ;
 
 
 
- function calculatePastIndexesAverage(indexes, currentYear) {
-//  throw new Error('calculatePastIndexesAverage') ;
+ function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
+//  throw new Error('calculateIndexesForSamples') ;
 
-  var pastIndexes = {
-    count: 0,
-    sum: 0,
-  } ;
+  if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
+  var acc = [] ;
+  for (var i=0; i < samples.length ; i++){
+    if(!isClouds(samples[i])) {
+      var indexValue = processSampleMethod(samples[i]) ;
+      if(indexValue) {
+        var sceneYear = scenes[i].date.getFullYear() ;
 
-  for (var i = 1; i <= nbPastYears; i++) {
-    var indexValue = indexes[currentYear - i] ;
-    if (indexValue && indexValue.count) {
-      pastIndexes.count++ ;
-      pastIndexes.sum += indexValue.sum / indexValue.count ;
-    }
-  }
-
-  return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
+       if (!acc[sceneYear]) {
+         acc[sceneYear] = {
+           count: 1,
+           sum: indexValue,
+         }
+      }else{
+       acc[sceneYear].count++ ;
+       acc[sceneYear].sum += indexValue ;
+       }
+     }
+   }  
+ }
+return acc
+  
 } ;
-
   
   
 
