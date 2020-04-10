@@ -110,7 +110,7 @@ function calculatePastIndexesStandardDeviation (indexes, currentYear, pastAverag
 
   if (!scenes.length) throw new Error('scenes array is empty') ;
 
-  var indexes = calculateIndexesForSamples(samples, scenes, calculateIndex) ;
+  var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
   var currentYear = scenes[0].date.getFullYear() ;
 
   /*var tmpString = "\n"
@@ -196,7 +196,7 @@ function calculateIndexAnomaly(indexesAverages,scenes,samples) {
     Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ; */
-  var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
+  var indexes = calculateIndexesForSamples(samples, scenes, calculateIndex) ;
 
 
   return Math.max(Math.min((indexesAverages.current-indexesAverages.past)/
