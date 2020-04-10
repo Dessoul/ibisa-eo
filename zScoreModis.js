@@ -196,7 +196,7 @@ function calculateIndexAnomaly(indexesAverages,scenes,samples) {
     Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ; */
-  var indexes = calculateIndexesForSamples(samples, scenes, calculateIndex) ;
+  var indexes = calculateIndexesForSamples(samples, scenes, calculateIndex(samples)) ;
 
 
   return Math.max(Math.min((indexesAverages.current-indexesAverages.past)/
