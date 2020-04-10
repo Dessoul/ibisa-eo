@@ -28,7 +28,10 @@ var pixelEvalMaxValue = 4 ;
   }
 } ;
 
-function calculateIndexesForSamples (samples, scenes) {
+
+ function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
+//  throw new Error('calculateIndexesForSamples') ;
+
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
   var acc = [] ;
   for (var i=0; i < samples.length ; i++){
@@ -50,7 +53,8 @@ function calculateIndexesForSamples (samples, scenes) {
    }  
  }
 return acc
-  } ;
+  
+} ;
 
  function calculatePastIndexesAverage(indexes, currentYear, pastAverage) {
   var pastIndexes = {
