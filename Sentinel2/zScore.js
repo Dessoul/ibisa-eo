@@ -83,7 +83,7 @@ function calculateIndexesForSamples (samples, scenes) {
 
 function setup(dss) {
   // get all bands for display and analysis
-  setInputComponents([dss.B01, dss.B02, dss.B06]) ;
+  setInputComponents([dss.B03, dss.B04, dss.B08]) ;
 
   // return as RGB
   setOutputComponentCount(3) ;
