@@ -124,10 +124,10 @@ function calculateIndexAnomaly(samples,scenes) {
     [defaultOutputValue, 0 - pixelEvalMaxValue, 0, pixelEvalMaxValue],
     [
       [0, 0, 0],
-      [0.9294117647058824‬, 0.4901960784313725, 0.192156862745098],
+      [0.9294, 0.4901, 0.1921],
 	 // [1,0,0],
      [1, 1, 1],
-      [0, 0.1254901960784314, 0.3764705882352941]
+      [0, 0.1254, 0.3764]
 	 // [0,1,0]
     ]
   ) ;
