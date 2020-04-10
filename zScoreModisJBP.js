@@ -197,9 +197,9 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     0 - pixelEvalMaxValue
   ) ; */
 
-  var finalIndex = (indexesAverages.current-indexesAverages.past)/
-    calculatePastIndexesStandardDeviation(indexesAverages, 
-      scenes[0].date.getFullYear(),indexesAverages.past) ;
+  var finalIndex = (indexesAverages.current-indexesAverages.past); ///
+    /*calculatePastIndexesStandardDeviation(indexesAverages, 
+      scenes[0].date.getFullYear(),indexesAverages.past) ;*/
   if (calculatePastIndexesStandardDeviation(indexesAverages, scenes[0].date.getFullYear(),indexesAverages.past) <= 0 ) throw new Error('Standard deviation negative : ' + calculatePastIndexesStandardDeviation(indexesAverages, scenes[0].date.getFullYear(),indexesAverages.past)) ;
   return Math.max(Math.min(finalIndex,pixelEvalMaxValue),0-pixelEvalMaxValue) ;
   
