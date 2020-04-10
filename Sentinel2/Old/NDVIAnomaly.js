@@ -3,10 +3,12 @@ var defaultOutputValue = -2 ;
 var ndviMinValue = 0.05 ;
 var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
-var pixelEvalMaxValue = 0.7 ;
+var pixelEvalMaxValue = 0.5 ;
 
 
  function calculateIndex(sample) {
+//  throw new Error('calculateIndex') ;
+
   var denom = sample.B04 + sample.B08 ;
   if (denom === 0) return null ;
 
@@ -16,18 +18,20 @@ var pixelEvalMaxValue = 0.7 ;
 
 
  function isClouds(sample) {
+//  throw new Error('isClouds') ;
+
   //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
-  /*var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
+  var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
   var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
 
-  return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;*/
-  
-  //The NDVI in itself is a good cloud detector
-  return true;
+  return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
 } ;
 
 
+
  function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
+//  throw new Error('calculateIndexesForSamples') ;
+
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
   var acc = [] ;
   for (var i=0; i < samples.length ; i++){
@@ -46,13 +50,15 @@ var pixelEvalMaxValue = 0.7 ;
        acc[sceneYear].sum += indexValue ;
        }
      }
-    }  
-  }
-  return acc
+   }  
+ }
+return acc
 } ;
 
 
  function calculatePastIndexesAverage(indexes, currentYear) {
+//  throw new Error('calculatePastIndexesAverage') ;
+
   var pastIndexes = {
     count: 0,
     sum: 0,
@@ -71,10 +77,25 @@ var pixelEvalMaxValue = 0.7 ;
 
 
  function calculateIndexAverages(samples, scenes, processSampleMethod) {
+//  throw new Error('calculateIndexAverages') ;
+
   if (!scenes.length) throw new Error('scenes array is empty') ;
 
   var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
   var currentYear = scenes[0].date.getFullYear() ;
+
+  /*var tmpString = "\n"
+  for(let i = currentYear - nbPastYears ; i <= currentYear ; i++) {
+	  tmpString = tmpString +
+		"year " + i + " | "
+	if (indexes[i]) {
+      tmpString = tmpString +
+		"count " + indexes[i].count + " | " +
+		"sum " + indexes[i].sum
+    }
+	tmpString = tmpString + "\n"
+  }
+  throw new Error(tmpString)*/
 
   var currentYearIndex = indexes[currentYear] ;
 
@@ -86,6 +107,10 @@ var pixelEvalMaxValue = 0.7 ;
 
 
 function setup(dss) {
+//  throw new Error('setup') ;
+
+  // get all bands for display and analysis
+  //setInputComponents([dss.B04, dss.B08]);
   setInputComponents([dss.B03, dss.B04, dss.B08, dss.B11]) ;
 
   // return as RGB
@@ -101,16 +126,18 @@ function filterScenes(scenes, metadataInput) {
         filteredScenes.push(scenes[i]);
       }
     }  
-  return filteredScenes;
+return filteredScenes;
+	
 } ;
 
 
 function calculateIndexAnomaly(indexesAverages) {
+  //throw new Error('calculateIndexAnomaly') ;
+
   if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
 
-  //By construction, indexesAverages.past > indexesAverages.past > 0
   return Math.max(
-    Math.min((indexesAverages.current - indexesAverages.past) / indexesAverages.past, pixelEvalMaxValue),
+    Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ;
 } ;
@@ -118,6 +145,8 @@ function calculateIndexAnomaly(indexesAverages) {
 
 // eslint-disable-next-line no-unused-vars
  function evaluatePixel(samples, scenes) {
+//  throw new Error('evaluatePixel') ;
+
   var indexesAverages = calculateIndexAverages(
     samples,
     scenes,
