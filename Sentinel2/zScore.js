@@ -1,4 +1,3 @@
- 
 var nbPastYears = 4 ;
 var defaultOutputValue = -20 ;
 var indexMinimumValue = -1 ;
@@ -6,59 +5,55 @@ var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
 var pixelEvalMaxValue = 4 ;
 
- function calculateIndex(sample) {
-//  throw new Error('calculateIndex') ;
 
-  var denom = sample.B03 + sample.B08 ;
-  if (denom === 0) return null ;
+function calculateIndex(sample) {
+    //  throw new Error('calculateIndex') ;
+    
+      var denom = sample.B03 + sample.B08 ;
+      if (denom === 0) return null ;
+    
+      var result = (sample.B08 - sample.B03) / denom ;
+      return result > indexMinimumValue ? result : null ;
+    } ;
 
-  var result = (sample.B08 - sample.B03) / denom ;
-  return result > indexMinimumValue ? result : null ;
-} ;
-
-
- function isClouds(sample) {
-//  throw new Error('isClouds') ;
-
-  //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
-  //var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
-  //var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
-  //return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
-  var ndvi = (sample.B08 - sample.B04) / (sample.B04 + sample.B08)
-  var split = 0.05;
-  if(ndvi <= split) {
-    return true
-  }else{
-    return false
-  }
-} ;
-
-
- function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
-//  throw new Error('calculateIndexesForSamples') ;
-
-  if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
-  var acc = [] ;
-  for (var i=0; i < samples.length ; i++){
-    if(!isClouds(samples[i])) {
-      var indexValue = processSampleMethod(samples[i]) ;
-      if(indexValue) {
-        var sceneYear = scenes[i].date.getFullYear() ;
-
-       if (!acc[sceneYear]) {
-         acc[sceneYear] = {
-           count: 1,
-           sum: indexValue,
-         }
-      }else{
-       acc[sceneYear].count++ ;
-       acc[sceneYear].sum += indexValue ;
-       }
-     }
-   }  
- }
-return acc
-} ;
+    function isClouds(sample) {
+        //  throw new Error('isClouds') ;
+        
+          //https://github.com/sentinel-hub/custom-scripts/tree/master/sentinel-2/cby_cloud_detection
+          //var ngdr = (sample.B03 - sample.B04) / (sample.B03 + sample.B04) ;
+          //var ratio = (sample.B03 - 0.175) / (0.39 - 0.175) ;
+          //return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
+          var ndvi = (sample.B08 - sample.B04) / (sample.B04 + sample.B08)
+          var split = 0.05;
+          if(ndvi <= split) {
+            return true
+          }else{
+            return false
+          }
+        } ;
+function calculateIndexesForSamples (samples, scenes) {
+    if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
+  
+    return samples.reduce(function(acc, sample, index) {
+      if (isClouds(sample)) return acc ;
+  
+      var indexValue = calculateIndex(sample) ;
+      if (!indexValue) return acc ;
+  
+      var sceneYear = scenes[index].date.getFullYear() ;
+      if (!acc[sceneYear]) {
+        acc[sceneYear] = {
+          count: 0,
+          sum: 0,
+        } ;
+      }
+  
+      acc[sceneYear].count++ ;
+      acc[sceneYear].sum += indexValue ;
+  
+      return acc ;
+    }, {}) ;
+  } ;
 
  function calculatePastIndexesAverage(indexes, currentYear, pastAverage) {
   var pastIndexes = {
@@ -88,24 +83,17 @@ return acc
 
 function setup(dss) {
   // get all bands for display and analysis
-  setInputComponents([dss.B03, dss.B04, dss.B08]) ;
+  setInputComponents([dss.B01, dss.B02, dss.B06]) ;
 
   // return as RGB
   setOutputComponentCount(3) ;
 } ;
 
 
+// you should reduce number of scenes you are processing as much as possible here to speed up the processing
 function filterScenes(scenes, metadataInput) {
-  filteredScenes = [];
-    for (var i=0; i < scenes.length ; i++){
-      if (scenes[i].date.getMonth()===metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears){
-        filteredScenes.push(scenes[i]);
-      }
-    }  
-return filteredScenes;
-	
+  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 } ;
-
 
 //Added Scenes to get the current year
 function calculateIndexAnomaly(samples,scenes) {
