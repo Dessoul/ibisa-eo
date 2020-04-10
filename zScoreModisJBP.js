@@ -26,19 +26,16 @@ var pixelEvalMaxValue = 10 ;
   //return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;
 
   //Do is null test as seen in ndvi 
-  var ndvi = (sample.B02 - sample.B01) / (sample.B02 + sample.B01)
+  var ndvi = (sample.B02 - sample.B01) / (sample.B02 + sample.B01) ;
   var split = 0.05;
   if(ndvi <= split) {
-    return true
+    return true ;
   }else{
-    return false
+    return false ;
   }
 } ;
 
-
-
-
-function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
+function calculateIndexesForSamples (samples, scenes) {
   //  throw new Error('calculateIndexesForSamples') ;
   
     if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
@@ -46,7 +43,7 @@ function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
     return samples.reduce(function(acc, sample, index) {
       if (isClouds(sample)) return acc ;
   
-      var indexValue = processSampleMethod(sample) ;
+      var indexValue = calculateIndex(sample) ;
       if (!indexValue) return acc ;
   
       var sceneYear = scenes[index].date.getFullYear() ;
@@ -63,10 +60,8 @@ function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
       return acc ;
     }, {}) ;
   } ;
-  
-  
 
- function calculatePastIndexesAverage(indexes, currentYear) {
+ function calculatePastIndexesAverage(indexes, currentYear, pastAverage) {
 //  throw new Error('calculatePastIndexesAverage') ;
 
   var pastIndexes = {
@@ -78,62 +73,21 @@ function calculateIndexesForSamples (samples, scenes, processSampleMethod) {
     var indexValue = indexes[currentYear - i] ;
     if (indexValue && indexValue.count) {
       pastIndexes.count++ ;
-      pastIndexes.sum += indexValue.sum / indexValue.count ;
+	  if (pastAverage === null) {
+		  pastIndexes.sum += indexValue.sum / indexValue.count ;
+	  } else {
+		  var averageIndexForMonth = indexValue.sum /indexValue.count ;
+		  pastIndexes.sum += (averageIndexForMonth - pastAverage) * (averageIndexForMonth - pastAverage) ;
+	  }
     }
   }
 
-  return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
+  if (pastAverage === null) {
+	  return pastIndexes.count >= pastIndexesMinValuesNumber ? pastIndexes.sum / pastIndexes.count : null ;
+  } else {
+	  return Math.sqrt(pastIndexes.sum / pastIndexes.count) ;
+  }
 } ;
-
-
-function calculatePastIndexesStandardDeviation (indexes, currentYear, pastAverage) {
-  var pastIndexes = {
-    count: 0,
-    sumSquareDeviation: 0
-  }
-
-  for (var i= 1; i <=nbPastYears; i++ ){
-    var indexValue = indexes[currentYear -i];
-    if(indexValue && indexValue.count){
-      pastIndexes.count++;
-      var averageIndexForMonth = indexValue.sum /indexValue.count
-      pastIndexes.sum += (averageIndexForMonth-pastAverage) * (averageIndexForMonth - pastAverage)
-    }
-  }
-  return Math.sqrt(pastIndexes.sum/pastIndexes.count)
-}
-
-
-
- function calculateIndexAverages(samples, scenes, processSampleMethod) {
-//  throw new Error('calculateIndexAverages') ;
-
-  if (!scenes.length) throw new Error('scenes array is empty') ;
-
-  var indexes = calculateIndexesForSamples(samples, scenes, processSampleMethod) ;
-  var currentYear = scenes[0].date.getFullYear() ;
-
-  /*var tmpString = "\n"
-  for(let i = currentYear - nbPastYears ; i <= currentYear ; i++) {
-	  tmpString = tmpString +
-		"year " + i + " | "
-	if (indexes[i]) {
-      tmpString = tmpString +
-		"count " + indexes[i].count + " | " +
-		"sum " + indexes[i].sum
-    }
-	tmpString = tmpString + "\n"
-  }
-  throw new Error(tmpString)*/
-
-  var currentYearIndex = indexes[currentYear] ;
-
-  return {
-    current: currentYearIndex && currentYearIndex.count >= currentIndexesMinValuesNumber && currentYearIndex.sum / currentYearIndex.count || null,
-    past: calculatePastIndexesAverage(indexes, currentYear),
-  } ;
-} ;
-
 
 function setup(dss) {
 //  throw new Error('setup') ;
@@ -185,22 +139,24 @@ function filterScenes(scenes, metadataInput) {
 } ;
 
 //Added Scenes to get the current year
-function calculateIndexAnomaly(indexesAverages,scenes) {
-  //throw new Error('calculateIndexAnomaly') ;
-//throw indexesAverages
-  if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
+function calculateIndexAnomaly(samples,scenes) {
+	
+  if (!scenes.length) throw new Error('scenes array is empty') ;
 
-  // has to receive indexes.Averages stdev so current-past/ stdev
-/*
-  return Math.max(
-    Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
-    0 - pixelEvalMaxValue
-  ) ; */
+  var indexes = calculateIndexesForSamples(samples, scenes) ;
+  var currentYear = scenes[0].date.getFullYear() ;
+  var currentYearIndex = indexes[currentYear] ;
 
-  var finalIndex = (indexesAverages.current-indexesAverages.past); ///
-    /*calculatePastIndexesStandardDeviation(indexesAverages, 
-      scenes[0].date.getFullYear(),indexesAverages.past) ;*/
-  if (calculatePastIndexesStandardDeviation(indexesAverages, scenes[0].date.getFullYear(),indexesAverages.past) <= 0 ) throw new Error('Standard deviation negative : ' + calculatePastIndexesStandardDeviation(indexesAverages, scenes[0].date.getFullYear(),indexesAverages.past)) ;
+  var currentIndexesAverages = currentYearIndex && currentYearIndex.count >= currentIndexesMinValuesNumber && currentYearIndex.sum / currentYearIndex.count || null ;
+  if (currentIndexesAverages === null) return defaultOutputValue ;
+  
+  var pastIndexesAverages = calculatePastIndexesAverage(indexes, currentYear, null);
+  if (pastIndexesAverages === null) return defaultOutputValue ;
+
+  var standardDeviation = calculatePastIndexesAverage(indexes, currentYear, pastIndexesAverages);
+
+  //standardDeviation cannot be null or zero because pastIndexesAverages is not null 
+  var finalIndex = (currentIndexesAverages - pastIndexesAverages) / standardDeviation ;
   return Math.max(Math.min(finalIndex,pixelEvalMaxValue),0-pixelEvalMaxValue) ;
   
 } ;
@@ -210,27 +166,26 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
  function evaluatePixel(samples, scenes) {
 //  throw new Error('evaluatePixel') ;
 
-  var indexesAverages = calculateIndexAverages(
+  /*var indexesAverages = calculateIndexAverages(
     samples,
     scenes,
     calculateIndex
-  ) ;
+  ) ;*/
 // Give range of color that you are given, 
-    const x = (z) =>{
-      return z/255
-    }
 
   return colorBlend(
-    calculateIndexAnomaly(indexesAverages,scenes),
+    calculateIndexAnomaly(samples,scenes),
 
     //defaultOutputvalue = -11
     // 
     [defaultOutputValue, 0 - pixelEvalMaxValue, 0, pixelEvalMaxValue],
     [
       [0, 0, 0],
-      [x(237), x(125), x(49)],
+      //[0.9294117647058824‬, 0.4901960784313725, 0.192156862745098],
+	  [1,0,0],
       [1, 1, 1],
-      [0, x(32), x(96)]
+      //[0, 0.1254901960784314, 0.3764705882352941]
+	  [0,1,0]
     ]
   ) ;
 } ;
