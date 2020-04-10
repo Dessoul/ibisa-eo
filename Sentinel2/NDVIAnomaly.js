@@ -23,7 +23,7 @@ var pixelEvalMaxValue = 0.7 ;
   return sample.B11 > 0.1 && (ratio > 1 || (ratio > 0 && ngdr > 0)) ;*/
   
   //The NDVI in itself is a good cloud detector
-  return true;
+  return false;
 } ;
 
 
