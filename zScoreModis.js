@@ -3,7 +3,7 @@ var defaultOutputValue = -20 ;
 var indexMinimumValue = -1 ;
 var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
-var pixelEvalMaxValue = 10 ;
+var pixelEvalMaxValue = 11 ;
 
 
  function calculateIndex(sample) {
@@ -185,7 +185,7 @@ function filterScenes(scenes, metadataInput) {
 } ;
 
 //Added Scenes to get the current year
-function calculateIndexAnomaly(indexesAverages,scenes) {
+function calculateIndexAnomaly(indexesAverages,scenes,samples) {
   //throw new Error('calculateIndexAnomaly') ;
 //throw indexesAverages
   if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
@@ -196,9 +196,11 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ; */
+  var indexes = calculateIndexesForSamples(samples, scenes, calculateIndex(samples)) ;
+
 
   return Math.max(Math.min((indexesAverages.current-indexesAverages.past)/
-  calculatePastIndexesStandardDeviation(indexesAverages, 
+  calculatePastIndexesStandardDeviation(indexes, 
     scenes[0].date.getFullYear(),indexesAverages.past),pixelEvalMaxValue),0-pixelEvalMaxValue)
 
 } ;
@@ -211,7 +213,7 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
   var indexesAverages = calculateIndexAverages(
     samples,
     scenes,
-    calculateIndex
+    calculateIndex 
   ) ;
 // Give range of color that you are given, 
     const x = (z) =>{
@@ -219,7 +221,7 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     }
 
   return colorBlend(
-    calculateIndexAnomaly(indexesAverages,scenes),
+    calculateIndexAnomaly(indexesAverages,scenes,samples),
 
     //defaultOutputvalue = -11
     // 
@@ -232,3 +234,8 @@ function calculateIndexAnomaly(indexesAverages,scenes) {
     ]
   ) ;
 } ;
+
+
+//restore script ndwi as was
+//create zscore file 
+//and optimize the script 
