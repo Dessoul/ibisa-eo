@@ -3,7 +3,7 @@ var defaultOutputValue = -20 ;
 var indexMinimumValue = -1 ;
 var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
-var pixelEvalMaxValue = 5 ;
+var pixelEvalMaxValue = 4 ;
 
 
  function calculateIndex(sample) {
