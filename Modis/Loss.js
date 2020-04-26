@@ -5,23 +5,35 @@ var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
 var pixelEvalMaxValue = 1 ;
 
+var a1 =  0.254829592;
+var a2 = -0.284496736;
+var a3 =  1.421413741;
+var a4 = -1.453152027;
+var a5 =  1.061405429;
+
 
 function normalcdf(mean, sigma, to) 
 {
     var z = (to-mean)/Math.sqrt(2*sigma*sigma);
     var t = 1/(1+0.3275911*Math.abs(z));
-    var a1 =  0.254829592;
-    var a2 = -0.284496736;
-    var a3 =  1.421413741;
-    var a4 = -1.453152027;
-    var a5 =  1.061405429;
+    //var a1 =  0.254829592;
+    //var a2 = -0.284496736;
+    //var a3 =  1.421413741;
+    //var a4 = -1.453152027;
+    //var a5 =  1.061405429;
     var erf = 1-(((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-z*z);
-    var sign = 1;
-    if(z < 0)
+    /*var sign = 1;
+    if (z < 0)
     {
         sign = -1;
     }
-    return (1/2)*(1+sign*erf);
+    return (1/2)*(1+sign*erf);*/
+	if (z < 0)
+    {
+        return 0.5*(1-erf);
+    } else {
+		return 0.5*(1+erf);
+	}
 }
 
 function calculateIndex(sample) {
@@ -126,7 +138,7 @@ function calculateIndexAnomaly(samples,scenes) {
 
   //standardDeviation cannot be null or zero because pastIndexesAverages is not null 
   var cdf = normalcdf(pastIndexesAverages, standardDeviation, currentIndexesAverages) ;
-  var finalIndex = (0.5 - cdf) * 2 ;
+  var finalIndex = (cdf - 0.5) * 2 ;
   return Math.max(Math.min(finalIndex,pixelEvalMaxValue),0-pixelEvalMaxValue) ;
   
 } ;
