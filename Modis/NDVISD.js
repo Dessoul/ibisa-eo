@@ -27,6 +27,7 @@ function calculateIndexesForSamples (samples, scenes) {
       var indexValue = calculateIndex(samples[i]) ;
       if(indexValue) {
         var sceneYear = scenes[i].date.getFullYear() ;
+		//var sceneYear = parseInt(scenes[i].date.getFullYear()) ;
 
        if (!indexes[sceneYear]) {
          indexes[sceneYear] = [indexValue] ;
@@ -46,7 +47,7 @@ function calculateIndexesForSamples (samples, scenes) {
   for (var i=minimumYear; i < indexes.length ; i++){
     if(indexes[i]) {
       var indexList = indexes[i] ;
-      for (var j=0; i < indexList.length ; j++){
+      for (var j=0; j < indexList.length ; j++){
         var indexValue = indexList[j] ;
     /*for (let indexList of indexes) {
     for (let indexValue of indexList) {*/
