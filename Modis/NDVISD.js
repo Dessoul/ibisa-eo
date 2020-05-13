@@ -28,7 +28,7 @@ function calculateIndexesForSamples (samples, scenes) {
         var sceneYear = scenes[i].date.getFullYear() ;
 
        if (!indexes[sceneYear]) {
-         indexes[sceneYear] = new Array(indexValue); ;
+         indexes[sceneYear] = [indexValue] ;
       }else{
        indexes[sceneYear].push(indexValue);
        }
@@ -86,6 +86,7 @@ function filterScenes(scenes, metadataInput) {
 function calculateIndexAnomaly(samples,scenes) {
   ///XXX NEW
   var indexes = calculateIndexesForSamples(samples, scenes) ;
+  throw new Error('Indexs are computed OK') ;
 
   var average = calculateIndexesAverageSD(indexes, null);
   if (average === null) return defaultOutputValue ;
