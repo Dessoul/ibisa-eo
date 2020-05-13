@@ -56,10 +56,11 @@ function calculateIndexesForSamples (samples, scenes) {
           sum += (indexValue - average) * (indexValue - average) ;
         }
         count++ ;
-  	}
-  }
+  	  }
+    }
   }
    
+  throw new Error("Index length is " + indexes.length + ", count is " + count + ", sum is " + sum) ;
   if (average === null) {
     return count >= indexesMinValuesNumber ? sum / count : null ;
   } else {
