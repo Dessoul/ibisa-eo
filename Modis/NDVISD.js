@@ -86,7 +86,7 @@ function filterScenes(scenes, metadataInput) {
 function calculateIndexAnomaly(samples,scenes) {
   ///XXX NEW
   var indexes = calculateIndexesForSamples(samples, scenes) ;
-  throw new Error('Indexs are computed OK') ;
+  //throw new Error('Indexs are computed OK') ;
 
   var average = calculateIndexesAverageSD(indexes, null);
   if (average === null) return defaultOutputValue ;
