@@ -45,18 +45,18 @@ function calculateIndexesForSamples (samples, scenes) {
   var count = 0 ;
   for (var i=minimumYear; i < indexes.length ; i++){
     if(!indexes[i]) {
-    var indexList = indexes[i] ;
-    for (var j=0; i < indexList.length ; j++){
-      var indexValue = indexList[j] ;
+      var indexList = indexes[i] ;
+      for (var j=0; i < indexList.length ; j++){
+        var indexValue = indexList[j] ;
     /*for (let indexList of indexes) {
     for (let indexValue of indexList) {*/
-      if (average === null) {
-      sum += indexValue ;
-      } else {
-      sum += (indexValue - average) * (indexValue - average) ;
-      }
-      count++ ;
-    }
+        if (average === null) {
+          sum += indexValue ;
+        } else {
+          sum += (indexValue - average) * (indexValue - average) ;
+        }
+        count++ ;
+  	}
   }
   }
    
