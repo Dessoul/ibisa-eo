@@ -44,7 +44,7 @@ function calculateIndexesForSamples (samples, scenes) {
   var sum = 0 ;
   var count = 0 ;
   for (var i=minimumYear; i < indexes.length ; i++){
-    if(!indexes[i]) {
+    if(indexes[i]) {
       var indexList = indexes[i] ;
       for (var j=0; i < indexList.length ; j++){
         var indexValue = indexList[j] ;
