@@ -1,4 +1,4 @@
-var nbPastYears = 5 ;
+var nbPastYears = 2 ;
 var defaultOutputValue = -2 ;
 var indexMinimumValue = 0.05  ;
 var pixelEvalMaxValue = 1 ;
