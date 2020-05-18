@@ -1,7 +1,7 @@
-var nbPastYears = 2 ;
+var nbPastYears = 5 ;
 var defaultOutputValue = -2 ;
 var indexMinimumValue = 0.05  ;
-var pixelEvalMaxValue = 1 ;
+var pixelEvalMaxValue = 0.5 ;
 var indexesMinValuesNumber = 10 ;
 var minimumYear = 2000 ;
 
