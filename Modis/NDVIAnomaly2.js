@@ -1,4 +1,4 @@
-var nbPastYears = 4 ;
+var nbPastYears = 3 ;
 var defaultOutputValue = -2 ;
 var ndviMinValue = 0.05 ;
 var currentIndexesMinValuesNumber = 1 ;
