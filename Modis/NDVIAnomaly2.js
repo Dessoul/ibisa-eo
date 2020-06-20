@@ -126,13 +126,21 @@ function calculateIndexAnomaly(indexesAverages) {
 
   return colorBlend(
     calculateIndexAnomaly(indexesAverages),
-    [defaultOutputValue, 0 - pixelEvalMaxValue , 0 - pixelEvalMaxValue * 3 / 4, 0 - pixelEvalMaxValue * 2 / 4 , 0 - pixelEvalMaxValue / 4, 0, pixelEvalMaxValue],
+    [defaultOutputValue, 
+	0 - pixelEvalMaxValue , 
+	//0 - pixelEvalMaxValue * 3 / 4, 
+	//0 - pixelEvalMaxValue * 2 / 4 , 
+	//0 - pixelEvalMaxValue / 4, 
+	0 - pixelEvalMaxValue * 2 / 3 , 
+	0 - pixelEvalMaxValue / 3, 
+	0, 
+	pixelEvalMaxValue],
     [
       [0, 0, 0],
 	  [0.8, 0, 0.8],
 	  [0.5, 0, 0],
 	  [1, 0, 0],
-      [1, 1, 0],
+      //[1, 1, 0],
       [1, 1, 1],
       [0, 1, 0]
     ]
