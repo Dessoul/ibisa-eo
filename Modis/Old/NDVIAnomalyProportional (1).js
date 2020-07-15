@@ -3,13 +3,11 @@ var defaultOutputValue = -2 ;
 var ndviMinValue = 0.05 ;
 var currentIndexesMinValuesNumber = 1 ;
 var pastIndexesMinValuesNumber = 3 ;
-var pixelEvalMaxValue = 0.5 ;
-//var nbPastYears=5;
-
+var pixelEvalMaxValue = 0.7 ;
 
 
  function calculateIndex(sample) {
-// throw new Error('calculateIndex') ;
+//  throw new Error('calculateIndex') ;
 
   var denom = sample.B02 + sample.B01 ;
   if (denom === 0) return null ;
@@ -34,27 +32,26 @@ var pixelEvalMaxValue = 0.5 ;
 //  throw new Error('calculateIndexesForSamples') ;
 
   if (samples.length !== scenes.length) throw new Error('samples and scenes arrays do not have same length') ;
-  var acc = [] ;
-  for (var i=0; i < samples.length ; i++){
-    if(!isClouds(samples[i])) {
-      var indexValue = processSampleMethod(samples[i]) ;
-      if(indexValue) {
-        var sceneYear = scenes[i].date.getFullYear() ;
 
-       if (!acc[sceneYear]) {
-         acc[sceneYear] = {
-           count: 1,
-           sum: indexValue,
-         }
-      }else{
-       acc[sceneYear].count++ ;
-       acc[sceneYear].sum += indexValue ;
-       }
-     }
-   }  
- }
-return acc
-  
+  return samples.reduce(function(acc, sample, index) {
+    if (isClouds(sample)) return acc ;
+
+    var indexValue = processSampleMethod(sample) ;
+    if (!indexValue) return acc ;
+
+    var sceneYear = scenes[index].date.getFullYear() ;
+    if (!acc[sceneYear]) {
+      acc[sceneYear] = {
+        count: 0,
+        sum: 0,
+      } ;
+    }
+
+    acc[sceneYear].count++ ;
+    acc[sceneYear].sum += indexValue ;
+
+    return acc ;
+  }, {}) ;
 } ;
 
 
@@ -122,14 +119,15 @@ function setup(dss) {
 
 // you should reduce number of scenes you are processing as much as possible here to speed up the processing
 function filterScenes(scenes, metadataInput) {
-  filteredScenes = [];
-    for (var i=0; i < scenes.length ; i++){
-      if (scenes[i].date.getMonth()===metadataInput.to.getMonth() && scenes[i].date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears){
-        filteredScenes.push(scenes[i]);
-      }
-    }  
-return filteredScenes;
-	
+  //throw new Error('filterScenes') ;
+
+  /*var tmpString = "Number of scenes : " + scenes.length + " | " + "Target date : " + metadataInput.to
+  for(let i = 0 ; i < scenes.length ; i++) {
+	  tmpString = tmpString + " | " + scenes[i].date
+  }
+  throw new Error(tmpString)*/
+
+  return scenes.filter(function(scene) {return (scene.date.getMonth() === metadataInput.to.getMonth() && scene.date.getFullYear() >= metadataInput.to.getFullYear() - nbPastYears) ; }) ;
 } ;
 
 
@@ -138,8 +136,9 @@ function calculateIndexAnomaly(indexesAverages) {
 
   if (indexesAverages.current === null || indexesAverages.past === null) return defaultOutputValue ;
 
+  //By construction, indexesAverages.past > indexesAverages.past > 0
   return Math.max(
-    Math.min(indexesAverages.current - indexesAverages.past, pixelEvalMaxValue),
+    Math.min((indexesAverages.current - indexesAverages.past) / indexesAverages.past, pixelEvalMaxValue),
     0 - pixelEvalMaxValue
   ) ;
 } ;
